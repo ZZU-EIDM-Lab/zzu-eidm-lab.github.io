@@ -37,6 +37,9 @@
   且前端只显示 `OWNER / MEMBER / COLLABORATOR` 的 **open** Issue，因此不会出现在网站上。
 - **编辑 / 删除**：在网站动态卡片点「查看 / 编辑」进入 Issue，用铅笔编辑，
   或在 Issue 右上角 `⋯ → Delete issue` 删除；关闭 Issue 也会从网站消失。
+- **图片**：图片存放在仓库 `assets/uploads/`。成员在 `/publish.html` 点「上传图片到仓库」
+  直接拖拽上传，然后在动态正文写 `![图](文件名.jpg)`（会自动指向 `assets/uploads/`），
+  也可写完整路径 `assets/uploads/文件名.jpg`。
 
 前端脚本 `assets/js/posts.js` 通过 GitHub API 拉取 Issue，按创建时间**倒序**展示。
 

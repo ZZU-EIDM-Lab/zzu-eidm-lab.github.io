@@ -44,11 +44,31 @@
         </div>
         <div class="card">
           <h3>发布</h3>
-          <p>点下方对应小组按钮，用 GitHub 账号登录后填写；正文可直接<strong>粘贴或拖拽图片</strong>，提交后自动显示在“研究方向”页。</p>
+          <p>点下方对应小组按钮，用 GitHub 账号登录后填写。需要配图时，先用「上传图片」把图传到仓库，再在正文引用即可。</p>
         </div>
         <div class="card">
           <h3>编辑 / 删除</h3>
           <p>在网站动态卡片点「查看 / 编辑」进入 Issue，用铅笔图标编辑，或用右上角 ⋯ 删除。</p>
+        </div>
+      </div>
+
+      <div class="section-head" style="margin-top:56px;">
+        <h2>上传图片（可选）</h2>
+        <p>图片存放在仓库的 <code>assets/uploads/</code>，永久有效、随仓库版本管理。</p>
+      </div>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>① 上传</h3>
+          <p>点下方按钮，把图片拖进页面 → 点 <strong>Commit changes</strong>。图片会存到 <code>assets/uploads/</code>，记下文件名。</p>
+          <p style="margin-top:14px;">
+            <a class="btn btn-primary btn-sm" href="https://github.com/ZZU-EIDM-Lab/zzu-eidm-lab.github.io/upload/main/assets/uploads" target="_blank" rel="noopener">上传图片到仓库 →</a>
+          </p>
+        </div>
+        <div class="card">
+          <h3>② 在动态里引用</h3>
+          <p>发布动态时，在正文里写：</p>
+          <p><code>![图片](assets/uploads/文件名.jpg)</code></p>
+          <p>也可以只写文件名 <code>![图片](文件名.jpg)</code>，网站会自动到 <code>assets/uploads/</code> 里找。</p>
         </div>
       </div>
 
@@ -78,7 +98,8 @@
       </div>
       <ol class="steps">
         <li><strong>登录 GitHub</strong>：确保已用组织成员账号登录。</li>
-        <li><strong>发布</strong>：点上面的小组卡片，打开预填模板，填写标题与正文后提交；正文里可直接粘贴/拖拽图片。</li>
+        <li><strong>（可选）传图</strong>：点「上传图片到仓库」，把图拖进去并 Commit，记下文件名；在正文写 <code>![图](文件名.jpg)</code>。</li>
+        <li><strong>发布</strong>：点上面的小组卡片，打开预填模板，填写标题与正文后提交。</li>
         <li><strong>编辑</strong>：在网站对应动态点「查看 / 编辑」，进入 Issue 后点毛笔图标修改。</li>
         <li><strong>删除</strong>：在 Issue 页面点右上角 ⋯ → Delete issue（需有权限）。</li>
       </ol>
