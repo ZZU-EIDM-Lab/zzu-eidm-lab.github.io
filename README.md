@@ -12,6 +12,7 @@
 | `research.html` | 五大研究组 + 各组动态 |
 | `publications.html` | 论文与成果（目前留空，待补充） |
 | `publish.html` | 成员发布入口（不在导航公开，仅成员收藏） |
+| `guide.html` | 成员使用说明（发布 / 图片 / 编辑删除 / FAQ） |
 | `contact.html` | 联系我们（邮箱 / 通讯地址） |
 | `assets/` | 样式、脚本、图片 |
 | `.github/ISSUE_TEMPLATE/` | 五个研究组的发布模板 |

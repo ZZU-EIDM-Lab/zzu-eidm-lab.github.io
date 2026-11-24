@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>使用说明 · 具身智能灵巧操作实验室</title>
+  <meta name="description" content="成员发布、图片上传、编辑删除的详细使用说明。" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <img class="brand-logo" src="assets/img/logo.png" alt="EIDM Lab 实验室标志" />
+        <span class="brand-text">EIDM Lab</span>
+      </a>
+      <button class="nav-toggle" aria-label="菜单" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav-links">
+        <a href="index.html">首页</a>
+        <a href="research.html">研究方向</a>
+        <a href="publications.html">论文</a>
+        <a href="contact.html">联系我们</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>成员使用说明</h2>
+        <p>写给第一次使用的同学，照着做就行。只有组织成员可以发布和修改，其他人只能浏览。</p>
+      </div>
+
+      <!-- 一 -->
+      <div class="member-group">
+        <h2>一、你能做什么</h2>
+        <div class="grid cols-3">
+          <div class="card"><h3>发布动态</h3><p>文字 + 图片，发布到对应的研究组。</p></div>
+          <div class="card"><h3>修改 / 删除</h3><p>随时改自己的内容，或删除不需要的内容。</p></div>
+          <div class="card"><h3>仅成员可操作</h3><p>非组织成员看不到入口，也无法修改。</p></div>
+        </div>
+      </div>
+
+      <!-- 二 -->
+      <div class="member-group">
+        <h2>二、发布一条动态（3 步）</h2>
+        <ol class="steps">
+          <li><strong>打开发布页</strong>：向管理员要链接，或收藏
+            <a href="publish.html">publish.html</a>。</li>
+          <li><strong>选择研究组</strong>：点你所属小组的卡片，会打开一个已填好标题前缀的 GitHub 页面。
+            第一次会让你登录 GitHub，用<strong>组织成员账号</strong>登录即可。</li>
+          <li><strong>填写并提交</strong>：在标题后写标题，正文写内容，点绿色按钮
+            <strong>Submit new issue</strong>。几秒后网站会自动出现。</li>
+        </ol>
+      </div>
+
+      <!-- 三 -->
+      <div class="member-group">
+        <h2>三、加图片（2 步）</h2>
+        <div class="grid cols-2">
+          <div class="card">
+            <h3>① 上传图片</h3>
+            <p>点下面的按钮，打开 GitHub 上传页，把图片拖进去，再点
+              <strong>Commit changes</strong>。图片会存到仓库的 <code>assets/uploads/</code>。</p>
+            <p style="margin-top:14px;">
+              <a class="btn btn-primary btn-sm" href="https://github.com/ZZU-EIDM-Lab/zzu-eidm-lab.github.io/upload/main/assets/uploads" target="_blank" rel="noopener">上传图片到仓库 →</a>
+            </p>
+          </div>
+          <div class="card">
+            <h3>② 在正文里引用</h3>
+            <p>回到动态正文，写一行：</p>
+            <pre><code>![图片](文件名.jpg)</code></pre>
+            <p>例如 <code>![图片](2026-11-lab.jpg)</code>。不用写路径，网站会自动到
+              <code>assets/uploads/</code> 里找。</p>
+          </div>
+        </div>
+        <div class="card" style="margin-top:20px;">
+          <p><strong>小建议：</strong>文件名用英文或数字、不要空格；图片先压缩到 1–2 MB 以内，页面加载更快。
+            多张图就写多行 <code>![...]</code>，会依次显示；图片可以点击放大。</p>
+        </div>
+      </div>
+
+      <!-- 四 -->
+      <div class="member-group">
+        <h2>四、修改 / 删除</h2>
+        <div class="grid cols-2">
+          <div class="card">
+            <h3>修改</h3>
+            <p>在网站动态卡片点「查看 / 编辑」进入该 Issue，点标题右上角的<strong>铅笔图标</strong>，
+              修改标题或正文后保存即可。</p>
+          </div>
+          <div class="card">
+            <h3>删除</h3>
+            <p>在 Issue 页面点右上角 <strong>⋯ → Delete issue</strong>；或者 <strong>Close issue</strong>
+              关闭（关闭后网站也会隐藏）。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 五 -->
+      <div class="member-group">
+        <h2>五、常见问题</h2>
+        <div class="card">
+          <p><strong>Q：点发布没反应 / 打不开？</strong><br />
+            确认已登录 GitHub，并且是组织成员。</p>
+          <p style="margin-top:14px;"><strong>Q：发布后网站没显示？</strong><br />
+            等几秒刷新；检查标题开头是不是 <code>[研究方向]</code>（模板已自动带好）；确认 Issue 没有被关闭。</p>
+          <p style="margin-top:14px;"><strong>Q：图片不显示？</strong><br />
+            确认图片已上传到 <code>assets/uploads/</code>；正文写的是
+            <code>![图片](文件名.jpg)</code>；文件名大小写要一致。</p>
+          <p style="margin-top:14px;"><strong>Q：别人能改我的动态吗？</strong><br />
+            不能。只有组织成员有权限；非成员创建的 Issue 会被自动关闭，也不会显示在网站上。</p>
+        </div>
+      </div>
+
+      <!-- 六 -->
+      <div class="member-group">
+        <h2>六、给管理员</h2>
+        <div class="card">
+          <ul class="group-list">
+            <li>成员发布页：<code>/publish.html</code>（不公开，私发成员收藏）</li>
+            <li>图片目录：<code>assets/uploads/</code></li>
+            <li>修改页面内容：编辑 <code>index.html</code> / <code>research.html</code> 等后 push</li>
+            <li>部署：推送到 <code>main</code> 后 GitHub Pages 自动构建（1–2 分钟）</li>
+            <li>非成员 Issue 拦截：<code>.github/workflows/guard-issues.yml</code></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <strong>EIDM Lab</strong>
+        <p>具身智能灵巧操作实验室</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/ZZU-EIDM-Lab" target="_blank" rel="noopener">GitHub</a>
+        <a href="publish.html">发布页</a>
+        <a href="contact.html">联系方式</a>
+      </div>
+      <p class="copyright">© <span id="year"></span> EIDM Lab. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
