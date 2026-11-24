@@ -138,9 +138,35 @@
     return results;
   }
 
+  function setupLightbox() {
+    if (document.getElementById("eidm-lightbox")) return;
+    var box = document.createElement("div");
+    box.id = "eidm-lightbox";
+    box.className = "lightbox";
+    box.innerHTML = '<button class="lightbox-close" aria-label="关闭">×</button><img alt="" />';
+    document.body.appendChild(box);
+
+    box.addEventListener("click", function (e) {
+      if (e.target === box || e.target.classList.contains("lightbox-close")) {
+        box.classList.remove("open");
+      }
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") box.classList.remove("open");
+    });
+    document.addEventListener("click", function (e) {
+      var img = e.target && e.target.closest ? e.target.closest(".post-body img") : null;
+      if (!img) return;
+      e.preventDefault();
+      box.querySelector("img").src = img.currentSrc || img.src;
+      box.classList.add("open");
+    });
+  }
+
   async function load() {
     var containers = Array.prototype.slice.call(document.querySelectorAll("[data-feed]"));
     setupPublish();
+    setupLightbox();
     if (!containers.length) return;
 
     try {
