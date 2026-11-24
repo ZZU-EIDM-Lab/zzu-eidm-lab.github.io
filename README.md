@@ -42,7 +42,8 @@
   直接拖拽上传，然后在动态正文写 `![图](文件名.jpg)`（会自动指向 `assets/uploads/`），
   也可写完整路径 `assets/uploads/文件名.jpg`。
 - **论文与成果**：发布页选「论文与成果」（模板标题前缀 `[论文]`），按模板填
-  `作者 / 会议期刊 / 年份 / 链接`，会自动排版到 `publications.html`。
+  `作者 / 期刊会议 / 年份 / 状态 / 出版页面 / PDF`，会按年份分组排版到
+  `publications.html`，点击标题跳转链接。
 
 前端脚本 `assets/js/posts.js` 优先读取站内 `data/posts.json`（由
 `.github/workflows/export-posts.yml` 在 Issue 变化或每 30 分钟自动导出），

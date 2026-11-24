@@ -104,17 +104,19 @@
 
   function parsePaper(p) {
     var body = cleanRaw(p.body);
-    var f = { authors: "", venue: "", year: "", link: "", desc: [] };
+    var f = { authors: "", venue: "", year: "", status: "", page: "", pdf: "", desc: [] };
     body.split("\n").forEach(function (line) {
       if (!line.trim()) return;
-      var m = line.match(/^\s*([^：:]{1,16})\s*[:：]\s*(.*)$/);
+      var m = line.match(/^\s*([^：:]{1,20})\s*[:：]\s*(.*)$/);
       if (m) {
         var key = m[1].trim();
         var val = m[2].trim();
         if (/^(作者|authors?|author)/i.test(key)) { f.authors = val; return; }
-        if (/^(会议|期刊|发表|venue|conference|journal)/i.test(key)) { f.venue = val; return; }
+        if (/^(期刊|会议|论坛|发表|venue|conference|journal|forum)/i.test(key)) { f.venue = val; return; }
         if (/^(年份|年|year)/i.test(key)) { f.year = val; return; }
-        if (/^(链接|网址|url|link|pdf)/i.test(key)) { f.link = val; return; }
+        if (/^(状态|status)/i.test(key)) { f.status = val; return; }
+        if (/^(pdf|全文)/i.test(key)) { f.pdf = val; return; }
+        if (/^(出版页面|页面|出版|官网|page|url|链接|link)/i.test(key)) { f.page = val; return; }
         if (/^(摘要|说明|abstract)/i.test(key)) { if (val) f.desc.push(val); return; }
       }
       f.desc.push(line.trim());
@@ -124,35 +126,65 @@
 
   function linkHref(raw) {
     if (!raw) return "";
-    var m = raw.match(/\]\((https?:\/\/[^)]+)\)/);
-    if (m) return m[1];
-    m = raw.match(/https?:\/\/\S+/);
-    return m ? m[0] : "";
+    var s = String(raw).trim();
+    var m = s.match(/\]\(([^)]+)\)/);
+    if (m) return m[1].trim();
+    m = s.match(/https?:\/\/\S+/);
+    if (m) return m[0];
+    // 允许相对路径，如 assets/uploads/x.pdf
+    if (/^[\w./-]+\.(pdf|png|jpe?g|gif|svg|html?)$/i.test(s) || s.charAt(0) === "/") return s;
+    return "";
   }
 
   function renderPapers(el, posts) {
-    var list = posts.filter(function (p) { return p.group === "论文"; });
-    if (!list.length) {
+    var items = posts
+      .filter(function (p) { return p.group === "论文"; })
+      .map(function (p) { return { p: p, f: parsePaper(p) }; });
+    if (!items.length) {
       el.innerHTML = '<div class="feed-empty">暂无论文。组织成员可在发布页添加。</div>';
       return;
     }
-    el.innerHTML = list.map(function (p) {
-      var f = parsePaper(p);
-      var tag = [f.venue, f.year].filter(Boolean).join(" ");
-      var href = linkHref(f.link);
-      var descHtml = f.desc.length ? renderBody(f.desc.join("\n")) : "";
-      var meta = [];
-      if (href) meta.push('<a href="' + esc(href) + '" target="_blank" rel="noopener">链接</a>');
-      else if (f.link) meta.push(esc(f.link));
-      meta.push('<a href="' + esc(p.url) + '" target="_blank" rel="noopener">查看 / 编辑</a>');
-      return '<div class="pub">' +
-        '<span class="venue">' + esc(tag || "论文") + "</span>" +
-        "<div>" +
-        '<p class="title">' + esc(p.title) + "</p>" +
-        (f.authors ? '<p class="authors">' + esc(f.authors) + "</p>" : "") +
-        '<p class="meta">' + meta.join(" ") + "</p>" +
-        (descHtml ? '<div class="paper-desc">' + descHtml + "</div>" : "") +
-        "</div></div>";
+
+    // 按年份分组（年份降序，“其他”最后）
+    var groups = {};
+    items.forEach(function (it) {
+      var y = (it.f.year || "").trim() || "其他";
+      (groups[y] = groups[y] || []).push(it);
+    });
+    var years = Object.keys(groups).sort(function (a, b) {
+      if (a === "其他") return 1;
+      if (b === "其他") return -1;
+      return Number(b) - Number(a);
+    });
+
+    el.innerHTML = years.map(function (y) {
+      var list = groups[y];
+      var rows = list.map(function (it) {
+        var f = it.f;
+        var p = it.p;
+        var pageHref = linkHref(f.page);
+        var pdfHref = linkHref(f.pdf);
+        var titleHref = pageHref || pdfHref;
+        var title = titleHref
+          ? '<a href="' + esc(titleHref) + '" target="_blank" rel="noopener">' + esc(p.title) + "</a>"
+          : esc(p.title);
+
+        var links = [];
+        if (pageHref) links.push('<a href="' + esc(pageHref) + '" target="_blank" rel="noopener">出版页面</a>');
+        if (pdfHref) links.push('<a href="' + esc(pdfHref) + '" target="_blank" rel="noopener">PDF</a>');
+        links.push('<a href="' + esc(p.url) + '" target="_blank" rel="noopener">编辑</a>');
+
+        return '<article class="paper">' +
+          '<h3 class="paper-title">' + title + "</h3>" +
+          (f.authors ? '<p class="paper-authors">' + esc(f.authors) + "</p>" : "") +
+          '<p class="paper-venue">' + esc(f.venue || "论文") +
+          (f.status ? '<span class="paper-status">' + esc(f.status) + "</span>" : "") + "</p>" +
+          '<p class="paper-links">' + links.join("") + "</p>" +
+          "</article>";
+      }).join("");
+
+      return '<div class="papers-year"><span class="year">' + esc(y) +
+        '</span><span class="count">' + list.length + ' 篇</span></div>' + rows;
     }).join("");
   }
 

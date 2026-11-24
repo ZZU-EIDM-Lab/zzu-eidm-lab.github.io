@@ -582,18 +582,90 @@ img { max-width: 100%; display: block; }
 }
 .lightbox-close:hover { background: rgba(255, 255, 255, 0.3); }
 
-/* 论文列表 */
-.papers { display: flex; flex-direction: column; }
-.paper-desc {
-  color: var(--muted);
-  font-size: 14px;
-  margin-top: 8px;
+/* 论文列表（按年份分组） */
+.papers { display: block; }
+.papers-year {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 44px 0 10px;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #d8c08a;
 }
-.paper-desc p { margin: 0 0 6px; }
-.paper-desc img {
-  max-width: 100%;
-  border-radius: 8px;
-  margin-top: 8px;
+.papers-year:first-child { margin-top: 0; }
+.papers-year .year {
+  font-size: 40px;
+  font-weight: 800;
+  color: #1e3a6e;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.papers-year .count { color: var(--muted); font-size: 14px; }
+
+.paper {
+  padding: 22px 0 18px;
+  border-bottom: 1px solid var(--line);
+}
+.paper:last-child { border-bottom: 0; }
+.paper-title {
+  position: relative;
+  margin: 0 0 12px;
+  padding-left: 22px;
+  font-size: 23px;
+  line-height: 1.4;
+}
+.paper-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 12px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #c8a24a;
+}
+.paper-title a { color: #1e4f8a; font-weight: 700; }
+.paper-title a:hover { text-decoration: underline; }
+.paper-authors {
+  margin: 0 0 10px;
+  padding-left: 22px;
+  color: var(--muted);
+  font-style: italic;
+  font-size: 16px;
+}
+.paper-venue {
+  margin: 0 0 10px;
+  padding-left: 22px;
+  font-weight: 700;
+  font-size: 16.5px;
+}
+.paper-status {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 2px 9px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #8a6d3b;
+  background: #f6efe1;
+  border-radius: 4px;
+  vertical-align: middle;
+}
+.paper-links {
+  margin: 0;
+  padding-left: 22px;
+  font-size: 14.5px;
+}
+.paper-links a {
+  color: #1e4f8a;
+  font-weight: 600;
+  margin-right: 18px;
+}
+.paper-links a::after { content: " ↗"; }
+
+@media (max-width: 720px) {
+  .paper-title { font-size: 19px; }
+  .paper-authors, .paper-venue { font-size: 15px; }
+  .papers-year .year { font-size: 32px; }
 }
 .post-foot {
   display: flex;
