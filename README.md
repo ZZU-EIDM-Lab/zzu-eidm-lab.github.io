@@ -42,7 +42,9 @@
   直接拖拽上传，然后在动态正文写 `![图](文件名.jpg)`（会自动指向 `assets/uploads/`），
   也可写完整路径 `assets/uploads/文件名.jpg`。
 
-前端脚本 `assets/js/posts.js` 通过 GitHub API 拉取 Issue，按创建时间**倒序**展示。
+前端脚本 `assets/js/posts.js` 优先读取站内 `data/posts.json`（由
+`.github/workflows/export-posts.yml` 在 Issue 变化或每 30 分钟自动导出），
+按创建时间**倒序**展示；静态文件缺失时才回退到 GitHub API，因此**不会受匿名 API 限流影响**。
 
 说明：
 - 内容没有写进仓库文件，实时来自 Issues；成员有 GitHub 账号即可，不需要额外注册。

@@ -163,6 +163,27 @@
     });
   }
 
+  function normalize(o) {
+    var p = parseTitle(o.title || "");
+    return {
+      title: p.title || o.title || "",
+      group: p.group,
+      body: o.body || "",
+      date: o.created_at,
+      url: o.html_url,
+      author: o.author
+    };
+  }
+
+  // 优先读取站内静态 JSON（由 GitHub Action 导出，无 API 限流、同源更快）
+  async function fetchStatic() {
+    var res = await fetch("data/posts.json?_=" + Date.now(), { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    var data = await res.json();
+    if (!Array.isArray(data)) throw new Error("bad json");
+    return data.map(normalize);
+  }
+
   async function load() {
     var containers = Array.prototype.slice.call(document.querySelectorAll("[data-feed]"));
     setupPublish();
@@ -170,30 +191,29 @@
     if (!containers.length) return;
 
     try {
-      var issues = await fetchAllIssues();
-      var posts = issues
-        .filter(function (i) { return !i.pull_request && MEMBER[i.author_association]; })
-        .map(function (i) {
-          var p = parseTitle(i.title);
-          return {
-            title: p.title || i.title,
-            group: p.group,
-            body: i.body || "",
-            date: i.created_at,
-            url: i.html_url,
-            author: i.user && i.user.login
-          };
-        })
-        .sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
+      var posts;
+      try {
+        posts = await fetchStatic();
+      } catch (eStatic) {
+        // 兜底：直接读 GitHub API（静态文件缺失时）
+        var issues = await fetchAllIssues();
+        posts = issues
+          .filter(function (i) { return !i.pull_request && MEMBER[i.author_association]; })
+          .map(function (i) {
+            return normalize({
+              title: i.title,
+              body: i.body,
+              created_at: i.created_at,
+              html_url: i.html_url,
+              author: i.user && i.user.login
+            });
+          });
+      }
 
+      posts.sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
       containers.forEach(function (c) { renderFeed(c, posts); });
     } catch (e) {
-      // 仓库/Issues 尚未创建时（404）按“暂无内容”处理，避免吓人的报错
-      if (/404/.test(String(e && e.message))) {
-        containers.forEach(function (c) { renderFeed(c, []); });
-      } else {
-        showError(containers);
-      }
+      containers.forEach(function (c) { renderFeed(c, []); });
     }
   }
 

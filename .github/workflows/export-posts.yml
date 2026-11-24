@@ -1,0 +1,55 @@
+name: Export posts
+
+on:
+  issues:
+    types: [opened, edited, closed, reopened, deleted, transferred, labeled, unlabeled]
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build data/posts.json
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require("fs");
+            const allowed = ["OWNER", "MEMBER", "COLLABORATOR"];
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              per_page: 100
+            });
+            const posts = issues
+              .filter((i) => !i.pull_request && allowed.includes(i.author_association))
+              .map((i) => ({
+                title: i.title,
+                body: i.body || "",
+                created_at: i.created_at,
+                html_url: i.html_url,
+                author: (i.user && i.user.login) || ""
+              }));
+            fs.mkdirSync("data", { recursive: true });
+            fs.writeFileSync("data/posts.json", JSON.stringify(posts, null, 2) + "\n");
+            console.log(`exported ${posts.length} posts`);
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/posts.json
+          if git diff --cached --quiet; then
+            echo "no changes"
+          else
+            git commit -m "chore: update posts.json"
+            git push
+          fi
