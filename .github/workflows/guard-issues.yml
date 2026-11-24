@@ -1,0 +1,34 @@
+name: Guard issues (members only)
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  issues: write
+
+jobs:
+  close-non-member:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close issues opened by non-members
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const allowed = ['OWNER', 'MEMBER', 'COLLABORATOR'];
+            if (allowed.includes(issue.author_association)) return;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              body: '感谢关注！本仓库仅接受组织成员发布内容，此条目已自动关闭。'
+            });
+
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              state: 'closed'
+            });

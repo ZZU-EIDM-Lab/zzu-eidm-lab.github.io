@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>成员发布 · 具身智能灵巧操作实验室</title>
+  <meta name="description" content="组织成员登录后发布、编辑研究组动态。" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <img class="brand-logo" src="assets/img/logo.png" alt="EIDM Lab 实验室标志" />
+        <span class="brand-text">EIDM Lab</span>
+      </a>
+      <button class="nav-toggle" aria-label="菜单" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav-links">
+        <a href="index.html">首页</a>
+        <a href="research.html">研究方向</a>
+        <a href="publications.html">论文</a>
+        <a href="contact.html">联系我们</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>成员发布</h2>
+        <p>
+          本页仅供<strong>组织成员</strong>使用，未在网站导航中公开。请成员收藏本页地址。
+          发布、编辑、删除都由 GitHub 账号权限控制，非成员无法修改。
+        </p>
+      </div>
+
+      <div class="grid cols-3">
+        <div class="card">
+          <h3>谁能操作</h3>
+          <p>只有本组织成员（拥有仓库写权限）才能创建、编辑、删除。其他人既看不到入口，也无法修改。</p>
+        </div>
+        <div class="card">
+          <h3>发布</h3>
+          <p>点下方对应小组按钮，用 GitHub 账号登录后提交即可，几秒后自动显示在“研究方向”页。</p>
+        </div>
+        <div class="card">
+          <h3>编辑 / 删除</h3>
+          <p>在网站动态卡片点「查看 / 编辑」进入 Issue，用铅笔图标编辑，或用右上角 ⋯ 删除。</p>
+        </div>
+      </div>
+
+      <div class="section-head" style="margin-top:56px;">
+        <h2>选择小组并发布</h2>
+      </div>
+      <div class="publish-grid">
+        <a class="publish-card" data-template="post-aerospace" href="#">
+          <div><strong>未来航天机器人</strong><span class="sub">点击创建动态</span></div>
+        </a>
+        <a class="publish-card" data-template="post-retail" href="#">
+          <div><strong>无人零售机器人</strong><span class="sub">点击创建动态</span></div>
+        </a>
+        <a class="publish-card" data-template="post-flying" href="#">
+          <div><strong>飞行机器人</strong><span class="sub">点击创建动态</span></div>
+        </a>
+        <a class="publish-card" data-template="post-hand" href="#">
+          <div><strong>仿生灵巧手</strong><span class="sub">点击创建动态</span></div>
+        </a>
+        <a class="publish-card" data-template="post-dogarm" href="#">
+          <div><strong>机器狗+机械臂</strong><span class="sub">点击创建动态</span></div>
+        </a>
+      </div>
+
+      <div class="section-head" style="margin-top:56px;">
+        <h2>操作步骤</h2>
+      </div>
+      <ol class="steps">
+        <li><strong>登录 GitHub</strong>：确保已用组织成员账号登录。</li>
+        <li><strong>发布</strong>：点上面的小组卡片，打开预填模板，填写标题与正文后提交。</li>
+        <li><strong>编辑</strong>：在网站对应动态点「查看 / 编辑」，进入 Issue 后点毛笔图标修改。</li>
+        <li><strong>删除</strong>：在 Issue 页面点右上角 ⋯ → Delete issue（需有权限）。</li>
+      </ol>
+
+      <div class="card">
+        <p>
+          说明：非组织成员创建的 Issue 会被自动关闭，且不会显示在网站上。
+          也可以用管理员账号直接到
+          <a href="https://github.com/ZZU-EIDM-Lab/zzu-eidm-lab.github.io/issues" target="_blank" rel="noopener">GitHub Issues</a>
+          管理全部动态。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <strong>EIDM Lab</strong>
+        <p>具身智能灵巧操作实验室</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/ZZU-EIDM-Lab" target="_blank" rel="noopener">GitHub</a>
+        <a href="contact.html">联系方式</a>
+      </div>
+      <p class="copyright">© <span id="year"></span> EIDM Lab. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/posts.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
