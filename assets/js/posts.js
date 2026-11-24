@@ -188,6 +188,28 @@
     }).join("");
   }
 
+  // 发布页的“管理已发布内容”列表
+  function renderManage(el, posts) {
+    if (!posts.length) {
+      el.innerHTML = '<div class="feed-empty">还没有已发布内容。</div>';
+      return;
+    }
+    el.innerHTML = '<div class="manage-list">' + posts.map(function (p) {
+      var type = p.group || "动态";
+      return '<div class="manage-row">' +
+        '<span class="manage-type">' + esc(type) + "</span>" +
+        '<div class="manage-main">' +
+        '<a href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.title) + "</a>" +
+        '<span class="manage-date">' + esc(fmtDate(p.date)) + "</span>" +
+        "</div>" +
+        '<div class="manage-actions">' +
+        '<a href="' + esc(p.url) + '" target="_blank" rel="noopener">编辑</a>' +
+        '<a class="danger" href="' + esc(p.url) + '" target="_blank" rel="noopener">删除 / 关闭</a>' +
+        "</div>" +
+        "</div>";
+    }).join("") + "</div>";
+  }
+
   function showError(containers) {
     containers.forEach(function (c) {
       c.innerHTML = '<div class="feed-empty">动态加载失败（可能触发了 GitHub API 访问限制）。' +
@@ -275,9 +297,10 @@
   async function load() {
     var feeds = Array.prototype.slice.call(document.querySelectorAll("[data-feed]"));
     var papers = Array.prototype.slice.call(document.querySelectorAll("[data-papers]"));
+    var manages = Array.prototype.slice.call(document.querySelectorAll("[data-manage]"));
     setupPublish();
     setupLightbox();
-    if (!feeds.length && !papers.length) return;
+    if (!feeds.length && !papers.length && !manages.length) return;
 
     try {
       var posts;
@@ -302,9 +325,11 @@
       posts.sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
       feeds.forEach(function (c) { renderFeed(c, posts); });
       papers.forEach(function (c) { renderPapers(c, posts); });
+      manages.forEach(function (c) { renderManage(c, posts); });
     } catch (e) {
       feeds.forEach(function (c) { renderFeed(c, []); });
       papers.forEach(function (c) { renderPapers(c, []); });
+      manages.forEach(function (c) { renderManage(c, []); });
     }
   }
 

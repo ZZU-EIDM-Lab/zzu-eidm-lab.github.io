@@ -667,6 +667,53 @@ img { max-width: 100%; display: block; }
   .paper-authors, .paper-venue { font-size: 15px; }
   .papers-year .year { font-size: 32px; }
 }
+
+/* 发布页：已发布内容管理 */
+.manage-list { display: flex; flex-direction: column; }
+.manage-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.manage-row:last-child { border-bottom: 0; }
+.manage-type {
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 3px 9px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.manage-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.manage-main a {
+  font-weight: 600;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.manage-date { color: var(--muted); font-size: 12.5px; }
+.manage-actions {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 14px;
+  font-size: 14px;
+}
+.manage-actions a { color: var(--accent); font-weight: 600; }
+.manage-actions a.danger { color: #c0392b; }
+@media (max-width: 720px) {
+  .manage-row { flex-wrap: wrap; }
+  .manage-main { flex-basis: 100%; order: 2; }
+}
 .post-foot {
   display: flex;
   justify-content: space-between;
