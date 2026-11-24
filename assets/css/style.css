@@ -509,9 +509,43 @@ img { max-width: 100%; display: block; }
   margin: 0 0 10px;
   color: #334155;
   font-size: 14.5px;
-  white-space: pre-wrap;
   word-break: break-word;
+  overflow-wrap: anywhere;
 }
+.post-body p { margin: 0 0 10px; }
+.post-body p:last-child { margin-bottom: 0; }
+.post-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 8px 0;
+  display: block;
+}
+.post-body a { word-break: break-all; }
+.post-body ul, .post-body ol { margin: 0 0 10px; padding-left: 22px; }
+.post-body h1, .post-body h2, .post-body h3, .post-body h4 {
+  font-size: 16px;
+  margin: 12px 0 6px;
+}
+.post-body code {
+  background: var(--bg-soft);
+  padding: 1px 5px;
+  border-radius: 5px;
+  font-size: 13px;
+}
+.post-body pre {
+  background: var(--bg-soft);
+  padding: 12px;
+  border-radius: 8px;
+  overflow: auto;
+}
+.post-body blockquote {
+  margin: 0 0 10px;
+  padding-left: 12px;
+  border-left: 3px solid var(--line);
+  color: var(--muted);
+}
+.post-body .plain { white-space: pre-wrap; }
 .post-foot {
   display: flex;
   justify-content: space-between;

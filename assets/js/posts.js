@@ -32,16 +32,45 @@
       " " + p(d.getHours()) + ":" + p(d.getMinutes());
   }
 
-  function cleanBody(body) {
+  if (window.DOMPurify) {
+    window.DOMPurify.addHook("afterSanitizeAttributes", function (node) {
+      if (node.tagName === "A") {
+        node.setAttribute("target", "_blank");
+        node.setAttribute("rel", "noopener noreferrer");
+      }
+      if (node.tagName === "IMG") {
+        node.setAttribute("loading", "lazy");
+        node.setAttribute("referrerpolicy", "no-referrer");
+      }
+    });
+  }
+
+  function cleanRaw(body) {
     if (!body) return "";
-    var s = String(body)
+    return String(body)
       .replace(/<!--[\s\S]*?-->/g, "")      // 去掉模板中的注释
       .replace(/（在这里填写内容）/g, "")    // 去掉占位符
       .replace(/\r\n/g, "\n")
       .replace(/\n{3,}/g, "\n\n")
       .trim();
-    if (s.length > 320) s = s.slice(0, 320) + "…";
-    return s;
+  }
+
+  // 把 Issue 正文（Markdown）渲染成安全的 HTML，支持图片、加粗、列表、链接等
+  function renderBody(body) {
+    var raw = cleanRaw(body);
+    if (!raw) return "";
+    if (window.marked && window.DOMPurify) {
+      try {
+        var html = window.marked.parse(raw, { breaks: true, gfm: true });
+        return window.DOMPurify.sanitize(html, {
+          ALLOWED_TAGS: ["p", "br", "strong", "em", "b", "i", "u", "s", "del", "a",
+            "ul", "ol", "li", "blockquote", "code", "pre", "h1", "h2", "h3", "h4",
+            "h5", "h6", "img", "hr", "table", "thead", "tbody", "tr", "th", "td"],
+          ALLOWED_ATTR: ["href", "src", "alt", "title", "width", "height", "align"]
+        });
+      } catch (e) { /* fall through */ }
+    }
+    return '<div class="plain">' + esc(raw).replace(/\n/g, "<br>") + "</div>";
   }
 
   function renderFeed(el, posts) {
@@ -53,11 +82,11 @@
       return;
     }
     el.innerHTML = list.map(function (p) {
-      var body = cleanBody(p.body);
+      var bodyHtml = renderBody(p.body);
       return '<article class="post">' +
         '<div class="post-head"><h4>' + esc(p.title) + '</h4>' +
         '<time datetime="' + esc(p.date) + '">' + esc(fmtDate(p.date)) + "</time></div>" +
-        (body ? '<p class="post-body">' + esc(body) + "</p>" : "") +
+        (bodyHtml ? '<div class="post-body">' + bodyHtml + "</div>" : "") +
         '<div class="post-foot">' +
         (p.author ? '<span>发布者：' + esc(p.author) + "</span>" : "") +
         ' <a href="' + esc(p.url) + '" target="_blank" rel="noopener">查看 / 编辑 ↗</a>' +
