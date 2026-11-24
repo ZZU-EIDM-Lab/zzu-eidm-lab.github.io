@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>使用说明 · 具身智能灵巧操作实验室</title>
   <meta name="description" content="成员发布、图片上传、编辑删除的详细使用说明。" />
-  <link rel="stylesheet" href="assets/css/style.css?v=20261125a" />
+  <link rel="stylesheet" href="assets/css/style.css?v=20261125b" />
 </head>
 <body>
   <header class="site-header">
@@ -69,7 +69,8 @@
           <div class="card">
             <h3>① 上传图片</h3>
             <p>点下面的按钮，打开 GitHub 上传页，把图片拖进去，再点
-              <strong>Commit changes</strong>。图片会存到仓库的 <code>assets/uploads/</code>。</p>
+              <strong>Commit changes</strong>。图片会存到仓库的 <code>assets/uploads/</code>。
+              也可以直接把<strong>整个文件夹</strong>拖进去，会自动建子目录。</p>
             <p style="margin-top:14px;">
               <a class="btn btn-primary btn-sm" href="https://github.com/ZZU-EIDM-Lab/zzu-eidm-lab.github.io/upload/main/assets/uploads" target="_blank" rel="noopener">上传图片到仓库 →</a>
             </p>
@@ -80,6 +81,8 @@
             <pre><code>![图片](文件名.jpg)</code></pre>
             <p>例如 <code>![图片](2026-11-lab.jpg)</code>。不用写路径，网站会自动到
               <code>assets/uploads/</code> 里找。</p>
+            <p style="margin-top:10px;">想<b>分目录</b>：把图放进电脑上的文件夹（如 <code>2026-11</code>），
+              把整个文件夹拖到上传页；引用时写 <code>![图片](2026-11/文件名.jpg)</code> 即可。</p>
           </div>
         </div>
         <div class="card" style="margin-top:20px;">
@@ -153,6 +156,6 @@
     </div>
   </footer>
 
-  <script src="assets/js/main.js?v=20261125a"></script>
+  <script src="assets/js/main.js?v=20261125b"></script>
 </body>
 </html>

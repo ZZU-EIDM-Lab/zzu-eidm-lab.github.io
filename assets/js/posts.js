@@ -40,9 +40,9 @@
       }
       if (node.tagName === "IMG") {
         var src = node.getAttribute("src") || "";
-        // 相对路径：只写文件名 -> 自动指向仓库的 assets/uploads/
+        // 相对路径统一指向仓库的 assets/uploads/（支持子目录，如 2026-11/photo.jpg）
         if (src && !/^(https?:)?\/\//i.test(src) && src.charAt(0) !== "/" && !/^data:/i.test(src)) {
-          if (src.indexOf("/") === -1) src = "assets/uploads/" + src;
+          if (src.indexOf("assets/") !== 0) src = "assets/uploads/" + src;
           node.setAttribute("src", src);
         }
         node.setAttribute("loading", "lazy");
