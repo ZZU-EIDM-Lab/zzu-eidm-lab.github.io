@@ -18,7 +18,7 @@
 
   function parseTitle(title) {
     var m = title.match(/^\s*[\[【]\s*([^\]】]+?)\s*[\]】]\s*/);
-    if (m && GROUP_NAMES.indexOf(m[1]) >= 0) {
+    if (m && (GROUP_NAMES.indexOf(m[1]) >= 0 || m[1] === "论文")) {
       return { group: m[1], title: title.slice(m[0].length) };
     }
     return { group: null, title: title };
@@ -81,7 +81,9 @@
 
   function renderFeed(el, posts) {
     var g = el.getAttribute("data-feed");
-    var list = (!g || g === "all") ? posts : posts.filter(function (p) { return p.group === g; });
+    var list = (!g || g === "all")
+      ? posts.filter(function (p) { return p.group !== "论文"; })
+      : posts.filter(function (p) { return p.group === g; });
     if (!list.length) {
       el.innerHTML =
         '<div class="feed-empty">暂无内容。组织成员登录 GitHub 后，点击“发布”即可创建。</div>';
@@ -97,6 +99,60 @@
         (p.author ? '<span>发布者：' + esc(p.author) + "</span>" : "") +
         ' <a href="' + esc(p.url) + '" target="_blank" rel="noopener">查看 / 编辑 ↗</a>' +
         "</div></article>";
+    }).join("");
+  }
+
+  function parsePaper(p) {
+    var body = cleanRaw(p.body);
+    var f = { authors: "", venue: "", year: "", link: "", desc: [] };
+    body.split("\n").forEach(function (line) {
+      if (!line.trim()) return;
+      var m = line.match(/^\s*([^：:]{1,16})\s*[:：]\s*(.*)$/);
+      if (m) {
+        var key = m[1].trim();
+        var val = m[2].trim();
+        if (/^(作者|authors?|author)/i.test(key)) { f.authors = val; return; }
+        if (/^(会议|期刊|发表|venue|conference|journal)/i.test(key)) { f.venue = val; return; }
+        if (/^(年份|年|year)/i.test(key)) { f.year = val; return; }
+        if (/^(链接|网址|url|link|pdf)/i.test(key)) { f.link = val; return; }
+        if (/^(摘要|说明|abstract)/i.test(key)) { if (val) f.desc.push(val); return; }
+      }
+      f.desc.push(line.trim());
+    });
+    return f;
+  }
+
+  function linkHref(raw) {
+    if (!raw) return "";
+    var m = raw.match(/\]\((https?:\/\/[^)]+)\)/);
+    if (m) return m[1];
+    m = raw.match(/https?:\/\/\S+/);
+    return m ? m[0] : "";
+  }
+
+  function renderPapers(el, posts) {
+    var list = posts.filter(function (p) { return p.group === "论文"; });
+    if (!list.length) {
+      el.innerHTML = '<div class="feed-empty">暂无论文。组织成员可在发布页添加。</div>';
+      return;
+    }
+    el.innerHTML = list.map(function (p) {
+      var f = parsePaper(p);
+      var tag = [f.venue, f.year].filter(Boolean).join(" ");
+      var href = linkHref(f.link);
+      var descHtml = f.desc.length ? renderBody(f.desc.join("\n")) : "";
+      var meta = [];
+      if (href) meta.push('<a href="' + esc(href) + '" target="_blank" rel="noopener">链接</a>');
+      else if (f.link) meta.push(esc(f.link));
+      meta.push('<a href="' + esc(p.url) + '" target="_blank" rel="noopener">查看 / 编辑</a>');
+      return '<div class="pub">' +
+        '<span class="venue">' + esc(tag || "论文") + "</span>" +
+        "<div>" +
+        '<p class="title">' + esc(p.title) + "</p>" +
+        (f.authors ? '<p class="authors">' + esc(f.authors) + "</p>" : "") +
+        '<p class="meta">' + meta.join(" ") + "</p>" +
+        (descHtml ? '<div class="paper-desc">' + descHtml + "</div>" : "") +
+        "</div></div>";
     }).join("");
   }
 
@@ -185,10 +241,11 @@
   }
 
   async function load() {
-    var containers = Array.prototype.slice.call(document.querySelectorAll("[data-feed]"));
+    var feeds = Array.prototype.slice.call(document.querySelectorAll("[data-feed]"));
+    var papers = Array.prototype.slice.call(document.querySelectorAll("[data-papers]"));
     setupPublish();
     setupLightbox();
-    if (!containers.length) return;
+    if (!feeds.length && !papers.length) return;
 
     try {
       var posts;
@@ -211,9 +268,11 @@
       }
 
       posts.sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
-      containers.forEach(function (c) { renderFeed(c, posts); });
+      feeds.forEach(function (c) { renderFeed(c, posts); });
+      papers.forEach(function (c) { renderPapers(c, posts); });
     } catch (e) {
-      containers.forEach(function (c) { renderFeed(c, []); });
+      feeds.forEach(function (c) { renderFeed(c, []); });
+      papers.forEach(function (c) { renderPapers(c, []); });
     }
   }
 

@@ -581,6 +581,20 @@ img { max-width: 100%; display: block; }
   background: rgba(255, 255, 255, 0.16);
 }
 .lightbox-close:hover { background: rgba(255, 255, 255, 0.3); }
+
+/* 论文列表 */
+.papers { display: flex; flex-direction: column; }
+.paper-desc {
+  color: var(--muted);
+  font-size: 14px;
+  margin-top: 8px;
+}
+.paper-desc p { margin: 0 0 6px; }
+.paper-desc img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-top: 8px;
+}
 .post-foot {
   display: flex;
   justify-content: space-between;
