@@ -714,6 +714,54 @@ img { max-width: 100%; display: block; }
   .manage-row { flex-wrap: wrap; }
   .manage-main { flex-basis: 100%; order: 2; }
 }
+
+/* 论文与成果：子标题 */
+.page-subhead {
+  font-size: 24px;
+  margin: 4px 0 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--line);
+}
+
+/* 研究成果（公众号文章风格） */
+.results { display: flex; flex-direction: column; gap: 8px; }
+.result {
+  padding: 24px 0 26px;
+  border-bottom: 1px solid var(--line);
+}
+.result:last-child { border-bottom: 0; }
+.result-title {
+  margin: 0 0 8px;
+  font-size: 24px;
+  line-height: 1.4;
+}
+.result-title a { color: var(--text); font-weight: 700; }
+.result-title a:hover { color: var(--accent); text-decoration: none; }
+.result-meta { color: var(--muted); font-size: 13.5px; margin-bottom: 16px; }
+.result-body {
+  color: #334155;
+  font-size: 16px;
+  line-height: 1.85;
+}
+.result-body p { margin: 0 0 14px; }
+.result-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  margin: 10px 0;
+  display: block;
+  cursor: zoom-in;
+}
+.result-body h1, .result-body h2, .result-body h3 {
+  font-size: 18px;
+  margin: 20px 0 8px;
+}
+.result-body ul, .result-body ol { margin: 0 0 14px; padding-left: 24px; }
+.result-body a { word-break: break-all; }
+@media (max-width: 720px) {
+  .result-title { font-size: 20px; }
+  .result-body { font-size: 15px; }
+}
 .post-foot {
   display: flex;
   justify-content: space-between;

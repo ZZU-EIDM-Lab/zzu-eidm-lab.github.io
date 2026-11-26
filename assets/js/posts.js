@@ -18,7 +18,7 @@
 
   function parseTitle(title) {
     var m = title.match(/^\s*[\[【]\s*([^\]】]+?)\s*[\]】]\s*/);
-    if (m && (GROUP_NAMES.indexOf(m[1]) >= 0 || m[1] === "论文")) {
+    if (m && (GROUP_NAMES.indexOf(m[1]) >= 0 || m[1] === "论文" || m[1] === "成果")) {
       return { group: m[1], title: title.slice(m[0].length) };
     }
     return { group: null, title: title };
@@ -82,7 +82,7 @@
   function renderFeed(el, posts) {
     var g = el.getAttribute("data-feed");
     var list = (!g || g === "all")
-      ? posts.filter(function (p) { return p.group !== "论文"; })
+      ? posts.filter(function (p) { return p.group !== "论文" && p.group !== "成果"; })
       : posts.filter(function (p) { return p.group === g; });
     if (!list.length) {
       el.innerHTML =
@@ -188,6 +188,23 @@
     }).join("");
   }
 
+  // 研究成果：类似公众号文章（标题 + 图片 + 正文）
+  function renderResults(el, posts) {
+    var list = posts.filter(function (p) { return p.group === "成果"; });
+    if (!list.length) {
+      el.innerHTML = '<div class="feed-empty">暂无研究成果。组织成员可在发布页添加。</div>';
+      return;
+    }
+    el.innerHTML = list.map(function (p) {
+      var bodyHtml = renderBody(p.body);
+      return '<article class="result">' +
+        '<h3 class="result-title"><a href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.title) + "</a></h3>" +
+        '<div class="result-meta">' + esc(fmtDate(p.date)) + (p.author ? " · " + esc(p.author) : "") + "</div>" +
+        (bodyHtml ? '<div class="result-body">' + bodyHtml + "</div>" : "") +
+        "</article>";
+    }).join("");
+  }
+
   // 发布页的“管理已发布内容”列表
   function renderManage(el, posts) {
     if (!posts.length) {
@@ -265,7 +282,7 @@
       if (e.key === "Escape") box.classList.remove("open");
     });
     document.addEventListener("click", function (e) {
-      var img = e.target && e.target.closest ? e.target.closest(".post-body img") : null;
+      var img = e.target && e.target.closest ? e.target.closest(".post-body img, .result-body img") : null;
       if (!img) return;
       e.preventDefault();
       box.querySelector("img").src = img.currentSrc || img.src;
@@ -297,10 +314,11 @@
   async function load() {
     var feeds = Array.prototype.slice.call(document.querySelectorAll("[data-feed]"));
     var papers = Array.prototype.slice.call(document.querySelectorAll("[data-papers]"));
+    var results = Array.prototype.slice.call(document.querySelectorAll("[data-results]"));
     var manages = Array.prototype.slice.call(document.querySelectorAll("[data-manage]"));
     setupPublish();
     setupLightbox();
-    if (!feeds.length && !papers.length && !manages.length) return;
+    if (!feeds.length && !papers.length && !results.length && !manages.length) return;
 
     try {
       var posts;
@@ -325,10 +343,12 @@
       posts.sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
       feeds.forEach(function (c) { renderFeed(c, posts); });
       papers.forEach(function (c) { renderPapers(c, posts); });
+      results.forEach(function (c) { renderResults(c, posts); });
       manages.forEach(function (c) { renderManage(c, posts); });
     } catch (e) {
       feeds.forEach(function (c) { renderFeed(c, []); });
       papers.forEach(function (c) { renderPapers(c, []); });
+      results.forEach(function (c) { renderResults(c, []); });
       manages.forEach(function (c) { renderManage(c, []); });
     }
   }
